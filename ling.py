@@ -1,3 +1,5 @@
+from textblob import TextBlob
+
 def pointscounter(string):
     final = string.count('.') + string.count('?') + string.count('!')
     return final
@@ -35,7 +37,17 @@ def main():
         print('	Текст немного трудно читать (для студентов).')
     else:
         print('Текст трудно читается (для выпускников ВУЗов).')
-
+    ru_blob = TextBlob(string)
+    en_blob = ru_blob.translate(to='en')
+    if en_blob.sentiment.polarity < -0.33:
+        print("Тональность текста: негативный")
+    elif en_blob.sentiment.polarity > 0.33:
+        print('Тональность текста: позитивный')
+    else:
+        print('Тональность текста: нейтральный')
+    obj = round(en_blob.sentiment.subjectivity * 1000)
+    the = str(obj / 10) + '%'
+    print('Объективность текста: ', the)
 
 if __name__ == '__main__':
     main()
